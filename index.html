@@ -33,46 +33,53 @@
         <form id="form" autocomplete="off">
             <div id="choices-container">
                 <div class="form-container stimulus-number-container">
-                    <label for="stimulus-number">Quantity:</label>
-                    <input type="number" id="stimulus-number" min="1" size="5" value="15" maxlength="4">
-                    <img src="./images/question-circle-solid.svg" id="question-icon">
+                    <label for="stimulus-number">量:</label>
+                    <input type="number" id="stimulus-number" min="1" size="5" value="40" maxlength="4">
+                    <img src="./images/question-circle-solid.svg" id="question-icon" hidden>
                     <div id="quantity-information">
                         <div id="quantity-text">Entering the number 15 will display 30 words in total - 15 with<br> matching meaning and color, 15 with mismatched meaning and color</div>
                     </div>
                 </div>
                 
-                <div class="form-container">
-                    <input type="radio" name="evaluation" id="word-meaning" value="word-meaning" checked>
+                
+                <div class="form-container" hidden>
+                    <input type="radio" name="evaluation" id="word-meaning" value="word-meaning">
                     <label for="word-meaning">Evaluate Word Meaning</label><br>
                 </div>
-    
+                
                 <div class="form-container">
-                    <input type="radio" name="evaluation" id="word-color" value="word-color">
-                    <label for="word-color">Evaluate Word Color</label><br>
+                    <input type="radio" name="evaluation" id="word-color" value="word-color" checked>
+                    <label for="word-color">単語の色を評価する</label><br>
+                    <p>単語の色に応じて対応するボタンを押してください</p>
                 </div>
             </div>
         </form>
 
-        <button class="button" id="start-button" type="button">Start</button>
+        <button class="button" id="start-button" type="button">スタート</button>
     </div>
 
     <div id="test-container" class="container flow-column">
-        <div id="word-display-area"></div>
+        <div style="width: 300px;height:300px;font-size: 260px"  id="word-display-area"></div>
 
         <div class="button-container">
             <div class="numpad-word-container">
-                <button class="button no-display" id="red-choice-button" type="button">red</button>
+                <button class="button no-display" id="red-choice-button" type="button" value="red">赤</button>
                 <div class="numpad-number">1</div>
             </div>
 
             <div class="numpad-word-container">
-                <button class="button no-display" id="green-choice-button" type="button">green</button>
+                <button class="button no-display" id="green-choice-button" type="button" value="green">緑</button>
                 <div class="numpad-number">2</div>
             </div>
 
             <div class="numpad-word-container">
-                <button class="button no-display" id="blue-choice-button" type="button">blue</button>
+                <button class="button no-display" id="blue-choice-button" type="button" value="blue">青</button>
                 <div class="numpad-number">3</div>
+            </div>
+
+            <div class="numpad-word-container">
+                <button class="button no-display" id="yellow-choice-button" type="button" value="yellow">黄</button>
+                <div class="numpad-number">4</div>
             </div>
         </div>
     </div>
@@ -80,22 +87,22 @@
     <div id="end-container" class="container flow-column">
         <div id="result-container" class="container flow-row">
             <div class="time-container">
-                <div class="time-title">Matching Time</div>
+                <div class="time-title">タイマー</div>
                 <div class="time-div" id="matched-time-div"></div>
             </div>
     
-            <div class="time-container">
+            <div class="time-container no-visibility">
                 <div class="time-title">Mismatched Time</div>
                 <div class="time-div" id="mismatched-time-div"></div>
             </div>
     
             <div class="time-container">
-                <div class="time-title">Incorrect</div>
+                <div class="time-title">間違った</div>
                 <div class="time-div" id="incorrect-div"></div>
             </div>
         </div>
 
-        <a class="button" id="download-button" download="info.txt">
+        <a class="button no-visibility" id="download-button" download="info.txt">
             <div class="text-with-icon">Download Information (.txt)</div>
             <img src="./images/arrow-circle-down-solid.svg" class="svg-icon">
         </a>
