@@ -13,6 +13,8 @@ export let mismatchedTimes = [];
 
 let matchingCounter = 0;
 let mismatchedCounter = 0;
+let startTime = 0;
+let endTime = 0;
 export let incorrectCounter = 0;
 
 function addEventListenersToInformationIcon () {
@@ -27,11 +29,15 @@ function addEventListenersToInformationIcon () {
     });
 }
 
+const COLOR_MAP = {"red": "赤", "green": "緑", "blue": "青", "yellow": "黄"}
+const COLOR_MAP_REVERSE = {"赤": "red", "緑": "green", "青": "blue", "黄": "yellow"}
+
+
 const sumOfArray = ( array ) => array.reduce( ( a, b ) => a + b, 0 );
 const getButtonText = ( button$ ) => button$.innerHTML;
 const toggleDomElementsDisplay = ( elements$ ) => elements$.forEach( el$ => el$.classList.toggle('no-display') );
 
-const getPrintedWordText = () => domElements.wordDisplayArea.innerHTML;
+const getPrintedWordText = () => COLOR_MAP_REVERSE[domElements.wordDisplayArea.innerHTML];
 const getPrintedWordColor = () => domElements.wordDisplayArea.style.color;
 const isPrintedWordMatching = () => getPrintedWordText() === getPrintedWordColor();
 const getQuantityFieldValue = () => domElements.formElements.stimulusNumberField.value;
@@ -61,7 +67,7 @@ function indicateButtonChoice (button$) {
 
 function addEventListenersToNumpadKeys () {
     document.addEventListener('keydown', (event) => {
-        const { redChoice, greenChoice, blueChoice } = domElements.buttons;
+        const { redChoice, greenChoice, blueChoice, yellowChoice } = domElements.buttons;
         
         switch (event.key) {
             case "1":
@@ -76,16 +82,22 @@ function addEventListenersToNumpadKeys () {
                 handleColorButtonClick(blueChoice);
                 indicateButtonChoice(blueChoice);
                 break;
+            case "4":
+                handleColorButtonClick(yellowChoice);
+                indicateButtonChoice(yellowChoice);
+                break;
         }
     });
 }
 
 function handleMatchScenario () {
+    console.log("match");
     matchingCounter++;
     matchedTimes.push( timeFunctions.logTime() );
 }
 
 function handleMismatchScenario () {
+    console.log("mismatch");
     mismatchedCounter++;
     mismatchedTimes.push( timeFunctions.logTime() );
 }
@@ -95,7 +107,15 @@ const handleIncorrectButtonAnswer = () => incorrectCounter++;
 
 /** Checks if user's answer was correct */
 function handleButtonAnswer ( button$ ) {
-    getButtonText( button$ ) === evaluatingMeaningOrColor() ? handleCorrectButtonAnswer() : handleIncorrectButtonAnswer();
+    let buttonText = COLOR_MAP_REVERSE[getButtonText( button$ )]
+
+    if(buttonText == getPrintedWordColor()){
+        handleMatchScenario();
+    }else{
+        handleMismatchScenario();
+    }
+
+    //buttonText === evaluatingMeaningOrColor() ? handleCorrectButtonAnswer() : handleIncorrectButtonAnswer();
 }
 
 /** Randomly generates a matching or mismatched word-color pair and displays it */
@@ -113,7 +133,7 @@ function displayNewPrintedWord () {
     }
 
     const pair = generationFunction();
-    wordDisplayArea.innerHTML = pair[0];
+    wordDisplayArea.innerHTML = COLOR_MAP[pair[0]];
     wordDisplayArea.style.color = pair[1];
 }
 
@@ -139,15 +159,18 @@ function handleStartClick () {
             redChoice,
             greenChoice,
             blueChoice,
+            yellowChoice
         }
     } = domElements;
 
-    toggleDomElementsDisplay([ form, start, redChoice, greenChoice, blueChoice ]);
+    toggleDomElementsDisplay([ form, start, redChoice, greenChoice, blueChoice, yellowChoice ]);
     domElements.containers.starting.remove();
 
     addEventListenersToNumpadKeys();
 
     displayNewWordAndRestartTimer();
+
+    startTime = Date.now();
 }
 
 function handleColorButtonClick ( buttonClicked$ ) {
@@ -176,11 +199,12 @@ function endTest () {
         buttons: {
             redChoice,
             greenChoice,
-            blueChoice
+            blueChoice,
+            yellowChoice
         }
     } = domElements;
 
-    toggleDomElementsDisplay([ wordDisplayArea, result, redChoice, greenChoice, blueChoice ]);
+    toggleDomElementsDisplay([ wordDisplayArea, result, redChoice, greenChoice, blueChoice, yellowChoice ]);
     domElements.containers.test.remove();
 
     addEndTestCounters();
@@ -190,8 +214,11 @@ function endTest () {
 
 /** Checks if word limit has been reached */
 function tryEndTest () {
-    if ( matchingCounter >= numberOfWords && mismatchedCounter >= numberOfWords ) {
+    //if ( matchingCounter >= numberOfWords && mismatchedCounter >= numberOfWords ) {
+    if ( matchingCounter >= numberOfWords ) {
+        endTime = Date.now();
         endTest();
+        
     }
 }
 
@@ -199,20 +226,22 @@ function tryEndTest () {
 function addEndTestCounters () {
     const averageTimeMatching = ( sumOfArray(matchedTimes) / matchedTimes.length ).toFixed(5);
     const averageTimeMismatched = ( sumOfArray(mismatchedTimes) / mismatchedTimes.length ).toFixed(5);
+    const spentTime = (endTime/1000 - startTime/1000).toFixed(2);
 
-    domElements.timeDivs.matched.innerHTML = averageTimeMatching;
+    domElements.timeDivs.matched.innerHTML = spentTime + " 秒";
     domElements.timeDivs.mismatched.innerHTML = averageTimeMismatched;
-    domElements.incorrectDiv.innerHTML = incorrectCounter;
+    domElements.incorrectDiv.innerHTML = mismatchedCounter + " 個";
 }
 
 /** Adds event handlers to buttons */
 function init () {
     addEventListenersToInformationIcon();
-    const { start, redChoice, greenChoice, blueChoice } = domElements.buttons;
+    const { start, redChoice, greenChoice, blueChoice, yellowChoice } = domElements.buttons;
     start.addEventListener( "click", () => handleStartClick() );
     redChoice.addEventListener( "click", () => handleColorButtonClick( redChoice ) );
     greenChoice.addEventListener( "click", () => handleColorButtonClick( greenChoice ) );
     blueChoice.addEventListener( "click", () => handleColorButtonClick( blueChoice ) );
+    yellowChoice.addEventListener( "click", () => handleColorButtonClick( yellowChoice ) );
 }
 
 init();

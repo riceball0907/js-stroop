@@ -1,4 +1,4 @@
-const COLOR_WORDS = ['red', 'green', 'blue'];
+const COLOR_WORDS = ['red', 'green', 'blue', 'yellow'];
 const COLOR_WORDS_COUNT = COLOR_WORDS.length;
 
 export function generateMatchingWordAndColor () {
