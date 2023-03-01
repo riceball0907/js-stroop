@@ -20,6 +20,7 @@ export const domElements = {
         error: document.getElementById('error-container'),
     },
     
+    timerText: document.getElementById('timer'),
     wordDisplayArea: document.getElementById('word-display-area'),
     incorrectDiv: document.getElementById('incorrect-div'),
     errorMessage: document.getElementById('error-message'),

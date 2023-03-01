@@ -3,6 +3,7 @@ import { TimeFunctions } from './time-functions.js';
 import { generateMatchingWordAndColor, generateMismatchedWordAndColor } from './word-color-generation.js';
 import { createFile } from './download-file.js';
 
+
 const timeFunctions = new TimeFunctions();
 
 export let numberOfWords;
@@ -153,6 +154,7 @@ function handleStartClick () {
     evaluatingMeaningOrColor = getRadioButtonChoice();
     
     const {
+        timerText,
         form,
         buttons: {
             start,
@@ -163,7 +165,7 @@ function handleStartClick () {
         }
     } = domElements;
 
-    toggleDomElementsDisplay([ form, start, redChoice, greenChoice, blueChoice, yellowChoice ]);
+    toggleDomElementsDisplay([ form, start, redChoice, greenChoice, blueChoice, yellowChoice, timerText ]);
     domElements.containers.starting.remove();
 
     addEventListenersToNumpadKeys();
@@ -190,9 +192,10 @@ function logInfo () {
 }
 
 /** Removes test container with choice buttons and displays end information counters */
-function endTest () {
+export function endTest () {
     const {
         wordDisplayArea,
+        timerText,
         containers: {
             result,
         },
@@ -204,7 +207,7 @@ function endTest () {
         }
     } = domElements;
 
-    toggleDomElementsDisplay([ wordDisplayArea, result, redChoice, greenChoice, blueChoice, yellowChoice ]);
+    toggleDomElementsDisplay([ wordDisplayArea, timerText, result, redChoice, greenChoice, blueChoice, yellowChoice ]);
     domElements.containers.test.remove();
 
     addEndTestCounters();
@@ -228,7 +231,7 @@ function addEndTestCounters () {
     const averageTimeMismatched = ( sumOfArray(mismatchedTimes) / mismatchedTimes.length ).toFixed(5);
     const spentTime = (endTime/1000 - startTime/1000).toFixed(2);
 
-    domElements.timeDivs.matched.innerHTML = spentTime + " 秒";
+    domElements.timeDivs.matched.innerHTML = matchingCounter + " 個";
     domElements.timeDivs.mismatched.innerHTML = averageTimeMismatched;
     domElements.incorrectDiv.innerHTML = mismatchedCounter + " 個";
 }

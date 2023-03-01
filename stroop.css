@@ -207,3 +207,9 @@ button:hover {
 .fade-out-animation {
     animation: fade-out 0.5s;
 }
+
+.timer-text {
+  line-height: 16px;
+  z-index: 10;
+  color:  white;
+}

@@ -17,6 +17,7 @@
     <script defer type="module" src="./js/stroop.js"></script>
     <script defer type="module" src="./js/download-file.js"></script>
     <script defer type="module" src="./js/number-field-validation.js"></script>
+    <script defer type="module" src="./js/timer.js"></script>
 
     <title>Stroop Effect</title>
 </head>
@@ -34,7 +35,7 @@
             <div id="choices-container">
                 <div class="form-container stimulus-number-container">
                     <label for="stimulus-number">量:</label>
-                    <input type="number" id="stimulus-number" min="1" size="5" value="40" maxlength="4">
+                    <input type="number" id="stimulus-number" min="1" size="5" value="999" maxlength="4">
                     <img src="./images/question-circle-solid.svg" id="question-icon" hidden>
                     <div id="quantity-information">
                         <div id="quantity-text">Entering the number 15 will display 30 words in total - 15 with<br> matching meaning and color, 15 with mismatched meaning and color</div>
@@ -59,6 +60,8 @@
     </div>
 
     <div id="test-container" class="container flow-column">
+        <div class="timer-text no-display" id="timer">timer</div>
+
         <div style="width: 300px;height:300px;font-size: 260px"  id="word-display-area"></div>
 
         <div class="button-container">
@@ -87,7 +90,7 @@
     <div id="end-container" class="container flow-column">
         <div id="result-container" class="container flow-row">
             <div class="time-container">
-                <div class="time-title">タイマー</div>
+                <div class="time-title">正答</div>
                 <div class="time-div" id="matched-time-div"></div>
             </div>
     
