@@ -2,6 +2,7 @@ import { domElements } from './dom-elements.js';
 import { TimeFunctions } from './time-functions.js';
 import { generateMatchingWordAndColor, generateMismatchedWordAndColor } from './word-color-generation.js';
 import { createFile } from './download-file.js';
+import { startTimer } from './timer.js';
 
 
 const timeFunctions = new TimeFunctions();
@@ -17,6 +18,7 @@ let mismatchedCounter = 0;
 let startTime = 0;
 let endTime = 0;
 export let incorrectCounter = 0;
+export let timerId;
 
 function addEventListenersToInformationIcon () {
     const { questionIcon, quantityInformation } = domElements.formElements;
@@ -173,6 +175,8 @@ function handleStartClick () {
     displayNewWordAndRestartTimer();
 
     startTime = Date.now();
+
+    timerId = startTimer(startTime);
 }
 
 function handleColorButtonClick ( buttonClicked$ ) {

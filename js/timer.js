@@ -1,17 +1,17 @@
 import { domElements } from './dom-elements.js';
-import { endTest } from './stroop.js'
+import { endTest, timerId } from './stroop.js'
 
 // 起始時間(計時器的啟動時間)。
-const startTime = new Date().getTime();
+//const startTime = new Date().getTime();
 
 // 目標時間(要倒數幾秒)。
-const targetSeconds = 181;
+const targetSeconds = 180;
 
 // 初始化。
 init(targetSeconds);
 
 // timer.
-var timer = function (startTime) {
+function timer(startTime) {
   // 當前時間。
   var currentTime = new Date().getTime();
   
@@ -22,7 +22,7 @@ var timer = function (startTime) {
   var remainingTime = targetSeconds - diffSec;
   
   // update progess.  
-  update(remainingTime);   
+  textRenderer(remainingTime);   
   
   if (remainingTime == 0) {
     // stop the timer.
@@ -34,15 +34,14 @@ var timer = function (startTime) {
 }
 
 // start the timer.
-var timerId = setInterval( function () { timer(startTime); }, 1000);
+export function startTimer(startTime){
+  var timerId = setInterval( function () { timer(startTime); }, 1000);
+  return timerId;
+}
+
 
 // 初始化。此處借用update函式來初次設定進度條。
 function init(seconds) {
-  update(seconds);
-}
-
-// update progess with the timer.
-function update (seconds) {
   textRenderer(seconds);
 }
 
